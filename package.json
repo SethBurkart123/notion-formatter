@@ -12,7 +12,10 @@
   "scripts": {
     "email": "bun run server.ts",
     "electron": "electron .",
-    "build:mac": "electron-builder --mac --arm64 --x64"
+    "build:mac": "electron-builder --mac --arm64 --x64",
+    "build:win": "electron-builder --win",
+    "build:linux": "electron-builder --linux",
+    "build:all": "electron-builder --mac --win --linux"
   },
   "devDependencies": {
     "@types/bun": "latest",
@@ -29,14 +32,44 @@
   },
   "build": {
     "appId": "com.example.notionformatter",
+    "productName": "Notion Formatter",
     "files": [
       "public/**",
       "electron/**",
       "package.json"
     ],
+    "directories": {
+      "output": "dist"
+    },
     "mac": {
-      "target": ["dmg", "zip"],
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64", "arm64"]
+        }
+      ],
       "category": "public.app-category.productivity"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64", "arm64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64", "arm64"]
+        }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "category": "Utility"
     }
   }
 }

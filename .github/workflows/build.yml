@@ -1,0 +1,83 @@
+name: Build Electron App
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  # Allow manual workflow dispatch
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+        include:
+          - os: macos-latest
+            platform: mac
+            build_cmd: bun run build:mac
+          - os: ubuntu-latest
+            platform: linux
+            build_cmd: electron-builder --linux
+          - os: windows-latest
+            platform: windows
+            build_cmd: electron-builder --win
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      # 1. Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Setup Bun
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: bun install
+
+      # 4. Build Electron app
+      - name: Build Electron app for ${{ matrix.platform }}
+        run: ${{ matrix.build_cmd }}
+        env:
+          # GitHub token for publishing releases (optional)
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 5. Upload build artifacts for macOS
+      - name: Upload macOS artifacts
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: notion-formatter-mac
+          path: |
+            dist/*.dmg
+            dist/*.zip
+          retention-days: 30
+
+      # 6. Upload build artifacts for Linux
+      - name: Upload Linux artifacts
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: notion-formatter-linux
+          path: |
+            dist/*.AppImage
+            dist/*.deb
+            dist/*.rpm
+          retention-days: 30
+
+      # 7. Upload build artifacts for Windows
+      - name: Upload Windows artifacts
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: notion-formatter-windows
+          path: |
+            dist/*.exe
+            dist/*.msi
+          retention-days: 30
