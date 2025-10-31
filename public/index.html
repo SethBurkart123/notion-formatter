@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Notion → Email Formatter</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="container">
+      <h1>Notion → Email Formatter</h1>
+      <p class="muted">Paste a public Notion page link. We’ll render a clean, continuous scroll section ideal for newsletters. Copy the preview into your email editor.</p>
+    </header>
+
+    <main class="container">
+      <form id="form" class="card" autocomplete="off">
+        <label for="url">Notion page URL</label>
+        <div class="row">
+          <input id="url" name="url" type="url" placeholder="https://www.notion.so/your-workspace/Page-Title-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" required />
+          <button type="submit">Render</button>
+        </div>
+        <p id="error" class="error" hidden></p>
+      </form>
+
+      <section class="toolbar">
+        <button id="copyBtn" class="ghost" disabled>Copy Preview</button>
+        <span id="status" class="status"></span>
+        <div style="flex:1"></div>
+        <button id="settingsBtn" class="ghost" title="Settings">Settings</button>
+      </section>
+
+      <section id="preview" class="preview">
+        <div id="content" class="email-surface">
+          <div class="placeholder">
+            <p>Rendered content will appear here.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal" hidden>
+      <div class="modal-backdrop"></div>
+      <div class="modal-panel card">
+        <h2 style="margin:0 0 8px; font-size:18px;">Settings</h2>
+        <p class="muted" style="margin:0 0 12px;">Store your Notion integration token to render content.</p>
+        <label for="notionToken">Notion API Token</label>
+        <input id="notionToken" type="password" placeholder="secret_..." />
+        <div style="display:flex; gap:8px; margin-top:12px; justify-content:flex-end;">
+          <button id="cancelSettingsBtn" class="ghost">Cancel</button>
+          <button id="saveSettingsBtn">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="container footnote">
+      <p class="muted">Tip: After rendering, select and copy the section above, then paste directly into your email editor.</p>
+    </footer>
+
+    <script src="client.js"></script>
+  </body>
+  </html>

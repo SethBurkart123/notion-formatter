@@ -1,0 +1,42 @@
+{
+  "name": "notion-formatter",
+  "module": "index.ts",
+  "main": "electron/main.js",
+  "version": "1.0.0",
+  "author": "Seth",
+  "description": "Notion Formatter",
+  "keywords": [
+    "notion",
+    "formatter"
+  ],
+  "scripts": {
+    "email": "bun run server.ts",
+    "electron": "electron .",
+    "build:mac": "electron-builder --mac --arm64 --x64"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@notionhq/client": "^4.0.1",
+    "dotenv": "^17.2.1",
+    "puppeteer": "^24.16.0"
+  },
+  "build": {
+    "appId": "com.example.notionformatter",
+    "files": [
+      "public/**",
+      "electron/**",
+      "package.json"
+    ],
+    "mac": {
+      "target": ["dmg", "zip"],
+      "category": "public.app-category.productivity"
+    }
+  }
+}
