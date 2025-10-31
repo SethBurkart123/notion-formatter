@@ -19,10 +19,10 @@ jobs:
             build_cmd: bun run build:mac
           - os: ubuntu-latest
             platform: linux
-            build_cmd: electron-builder --linux
+            build_cmd: bunx electron-builder --linux
           - os: windows-latest
             platform: windows
-            build_cmd: electron-builder --win
+            build_cmd: bunx electron-builder --win
 
     runs-on: ${{ matrix.os }}
 
